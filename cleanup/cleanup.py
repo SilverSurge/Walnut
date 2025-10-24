@@ -2,7 +2,7 @@ import time
 from db import get_connection
 
 # How often to run cleanup (seconds)
-CLEANUP_INTERVAL = 60 * 60  # every 1 min for testing
+CLEANUP_INTERVAL = 60 * 60  # 1 hr: change it to every 1 min in dev
 
 # How long to keep processed rows
 RETENTION_DAYS = 7

@@ -1,0 +1,3 @@
+psycopg[binary]
+kafka-python
+python-dotenv

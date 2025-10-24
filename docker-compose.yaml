@@ -38,6 +38,7 @@ services:
     container_name: app
     depends_on:
       - pgbouncer
+      - producer
     ports:
       - "8000:8000"
 
@@ -52,6 +53,47 @@ services:
     container_name: cleanup
     depends_on:
       - pgbouncer
-      
+  
+  kafka:
+    image: confluentinc/cp-kafka:8.1.0
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      # straight from confluentic docs example
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      CLUSTER_ID: 7d33fcf5089e470a964b8e7bf8408bbe  # Use uuidgen but without dashes
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
+    
+  producer:
+    build: ./producer
+    container_name: producer
+    depends_on:
+      - pgbouncer
+      - kafka
+
+  consumer:
+    build: ./consumer
+    container_name: consumer
+    depends_on:
+      - pgbouncer
+      - kafka
+      - producer
+
 volumes:
   pg_data:
+  kafka_data:
