@@ -24,7 +24,9 @@ def cleanup_outbox():
                             SELECT id
                             FROM kvs_outbox
                             WHERE status = 'processed'
-                              AND created_at < NOW() - INTERVAL '%s days'
+                            AND created_at < NOW() - INTERVAL '%s days'
+                            ORDER BY created_at
+                            FOR UPDATE SKIP LOCKED
                             LIMIT %s
                         )
                     """, (RETENTION_DAYS, BATCH_SIZE))
