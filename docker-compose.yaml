@@ -41,5 +41,17 @@ services:
     ports:
       - "8000:8000"
 
+  worker:
+    build: ./worker
+    container_name: worker
+    depends_on:
+      - pgbouncer
+
+  cleanup:
+    build: ./cleanup
+    container_name: cleanup
+    depends_on:
+      - pgbouncer
+      
 volumes:
   pg_data:

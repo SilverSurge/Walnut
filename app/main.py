@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import uuid
 from db import get_connection
 from pydantic import BaseModel
@@ -22,4 +22,22 @@ def create_kv(item:KVItem):
     return {
         "status": "accepted",
         "request_id": request_id
+    }
+
+@app.get("/status/{request_id}")
+def get_status(request_id: str):
+    with get_connection() as conn, conn.cursor() as cur:
+        cur.execute("""
+            SELECT status
+            FROM kvs_outbox
+            WHERE id = %s
+        """, (request_id,))
+        row = cur.fetchone()
+
+    if not row:
+        raise HTTPException(status_code=404, detail="Request ID not found")
+
+    return {
+        "request_id": request_id,
+        "status": row["status"]
     }
