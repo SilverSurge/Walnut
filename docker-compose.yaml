@@ -33,5 +33,13 @@ services:
     ports:
       - "8080:8080"
 
+  app:
+    build: ./app
+    container_name: app
+    depends_on:
+      - pgbouncer
+    ports:
+      - "8000:8000"
+
 volumes:
   pg_data:
