@@ -1,4 +1,6 @@
-# Walnut 
+# Walnut 🌰
+
+> A nod to the Postgres Write-Ahead Log (WAL) and a solid, reliable seed.
 
 A **Key-Value Store** system built using **FastAPI**, **PostgreSQL**, **PgBouncer**, **Kafka**, and Python-based microservices. This project demonstrates an **outbox pattern** with **event-driven processing**, enabling reliable propagation of KV updates to a Kafka topic and eventual persistence.
 
@@ -12,7 +14,6 @@ A **Key-Value Store** system built using **FastAPI**, **PostgreSQL**, **PgBounce
 * [API Endpoints](#api-endpoints)
 * [Configuration](#configuration)
 * [Cleanup](#cleanup)
-* [License](#license)
 
 ---
 
