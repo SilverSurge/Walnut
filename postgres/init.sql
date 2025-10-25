@@ -14,3 +14,11 @@ CREATE TABLE IF NOT EXISTS kvs_outbox (
     status TEXT NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE UNIQUE INDEX  idx_outbox_id ON kvs_outbox(id);
+
+CREATE INDEX IF NOT EXISTS idx_outbox_status
+ON kvs_outbox (status);
+
+CREATE INDEX idx_outbox_created_at
+ON kvs_outbox (created_at);
